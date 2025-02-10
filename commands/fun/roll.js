@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, Client } = require("discord.js");
+const { SlashCommandBuilder, Client, EmbedBuilder } = require("discord.js");
 
 const client = new Client({
     intents: []
@@ -25,9 +25,17 @@ module.exports = {
         const min = interaction.options.getInteger('min') || 1;
         const max = interaction.options.getInteger('max') || 100;
 
+        if (min > max) {
+            return await interaction.reply({ content: "Минимальное число не может быть больше максимального!", ephemeral: true });
+        }
+
         const random = Math.floor(Math.random() * (max - min + 1)) + min;
+
         if (interaction.channel.id === client.config.COMMANDS_CHANNEL_ID || interaction.user.id === client.config.OWNER_ID) {
-            await interaction.reply({ content: `Выпало число **${random}**`, ephemeral: true });
+            const embed = new EmbedBuilder()
+                .setColor(9789108)
+                .setDescription(`Выпало число **${random}**!`);
+            await interaction.reply({ embeds: [embed], ephemeral: true });
         } else {
             await interaction.reply({ content: `Эта команда доступна только в канале <#${client.config.COMMANDS_CHANNEL_ID}>`, ephemeral: true });
         }
