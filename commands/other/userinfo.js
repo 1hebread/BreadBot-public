@@ -34,7 +34,7 @@ module.exports = {
                 iconURL: interaction.user.displayAvatarURL(),
             });
 
-        if (interaction.channel.id === client.config.COMMANDS_CHANNEL_ID || interaction.user.id === "586408737712111616") {
+        if (interaction.channel.id === client.config.COMMANDS_CHANNEL_ID || interaction.user.id === client.config.OWNER_ID) {
             await interaction.reply({ embeds: [embed], ephemeral: false });
         } else {
             await interaction.reply({ content: `Эта команда доступна только в канале <#${client.config.COMMANDS_CHANNEL_ID}>`, ephemeral: true });
