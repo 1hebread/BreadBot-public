@@ -1,0 +1,10 @@
+{
+    "TOKEN": "you_token",
+    "APP_ID": "you_app_id",
+    "DB_HOST": "you_db_host",
+    "DB_USER": "you_db_user",
+    "DB_PASSWORD": "you_db_password",
+    "DB_NAME": "you_db_name"
+}
+
+RENAME THIS FILE TO config.json
