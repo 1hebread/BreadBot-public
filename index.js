@@ -1,4 +1,5 @@
 const { Client, PermissionsBitField } = require('discord.js');
+const mysql = require("mysql2/promise");
 
 const client = new Client({
     intents: [
@@ -21,6 +22,12 @@ client.on('ready', function () {
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
+const db = mysql.createPool({
+    host: client.config.DB_HOST,
+    user: client.config.DB_USER,
+    password: client.config.DB_PASSWORD,
+    database: client.config.DB_NAME
+});
 
 async function InteractionHandler(interaction, type) {
 
@@ -83,6 +90,28 @@ async function InteractionHandler(interaction, type) {
         }).catch( () => {} );
     }
 }
+
+client.on('guildMemberAdd', async member => {
+    const [mutes] = await db.execute("SELECT expires_at FROM mutes WHERE user_id = ? AND guild_id = ?", [member.id, member.guild.id]);
+    const currentTime = Date.now();
+
+    if (mutes.length > 0) {
+        const mute = mutes[0];
+        const muteRole = member.guild.roles.cache.find(r => r.name === "Muted");
+        if (muteRole) {
+            await member.roles.add(muteRole);
+            const remainingTime = mute.expires_at - currentTime;
+
+            // Размут через оставшееся время
+            setTimeout(async () => {
+                if (member.roles.cache.has(muteRole.id)) {
+                    await member.roles.remove(muteRole);
+                    await db.execute("DELETE FROM mutes WHERE user_id = ? AND guild_id = ?", [member.id, member.guild.id]);
+                }
+            }, remainingTime);
+        }
+    }
+});
 
 client.on('interactionCreate', async function(interaction) {
     if (!interaction.isCommand()) return;
