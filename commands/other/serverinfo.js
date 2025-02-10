@@ -1,4 +1,10 @@
-const { SlashCommandBuilder, EmbedBuilder, ChannelType, } = require("discord.js");
+const { Client, SlashCommandBuilder, EmbedBuilder, ChannelType, } = require("discord.js");
+
+const client = new Client({
+    intents: []
+});
+
+client.config = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -47,10 +53,10 @@ module.exports = {
                 { name: "Сервер создан:", value: `<:creation_date:1337421614949732412> <t:${timestamp}:D>`, inline: true }
             );
 
-        if (interaction.channel.id === "1294357469438541945" || interaction.user.id === "586408737712111616") {
+        if (interaction.channel.id === client.config.COMMANDS_CHANNEL_ID || interaction.user.id === client.config.OWNER_ID) {
             await interaction.reply({ embeds: [embed] });
         } else {
-            await interaction.reply({ content: "Эта команда доступна только в канале <#1294357469438541945>", ephemeral: true });
+            await interaction.reply({ content: `Эта команда доступна только в канале <#${client.config.COMMANDS_CHANNEL_ID}>`, ephemeral: true });
         }
     }
 };
