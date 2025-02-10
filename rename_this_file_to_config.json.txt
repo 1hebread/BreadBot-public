@@ -1,6 +1,8 @@
 {
     "TOKEN": "you_token",
     "APP_ID": "you_app_id",
+    "COMMANDS_CHANNEL_ID": "you_commands_channel_id",
+    "OWNER_ID": "you_owner_id",
     "DB_HOST": "you_db_host",
     "DB_USER": "you_db_user",
     "DB_PASSWORD": "you_db_password",
