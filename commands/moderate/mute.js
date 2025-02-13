@@ -64,13 +64,17 @@ module.exports = {
             return await interaction.reply({ content: "Неверный формат времени. Используйте например: 10m, 1h, 1d", ephemeral: true });
         }
 
+        if (reason.length > 255) {
+            return await interaction.reply({ content: "Причина не может быть длиннее 255 символов.", ephemeral: true });
+        }
+
         try {
             await member.roles.add(muteRole);
             const expiresAt = Date.now() + muteDuration;
             
             // Записываем мут в базу данных
-            await db.execute("INSERT INTO mutes (user_id, guild_id, expires_at) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE expires_at = ?", [
-                user.id, interaction.guild.id, expiresAt, expiresAt
+            await db.execute("INSERT INTO mutes (user_id, guild_id, reason, expires_at) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE expires_at = ?", [
+                user.id, interaction.guild.id, reason, expiresAt, expiresAt
             ]);
 
             const embed = new EmbedBuilder()
