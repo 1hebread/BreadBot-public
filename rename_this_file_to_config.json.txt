@@ -9,4 +9,4 @@
     "DB_NAME": "you_db_name"
 }
 
-RENAME THIS FILE TO config.json
+RENAME THIS FILE TO config.json // ИЗМЕНИТЕ НАЗВАНИЕ ЭТОГО ФАЙЛА НА config.json
