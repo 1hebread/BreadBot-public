@@ -39,6 +39,6 @@ module.exports = {
             embed.setDescription("Нет заглушенных пользователей.");
         }
         
-        return interaction.reply({ embeds: [embed] });
+        return interaction.reply({ embeds: [embed], ephemeral: true });
     }
 };
